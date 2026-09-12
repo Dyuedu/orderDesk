@@ -19,13 +19,19 @@ function openReturn(order, lines) {
 }
 
 function approve(returnRequest, clerkId, refundReason) {
+  // Keep both checks: FR-204 needs a reason for audit; FR-205 needs a clerk
+  // so the approval is attributable. Dropping either check would pass one
+  // story and fail the other.
+  if (!clerkId || !String(clerkId).trim()) {
+    throw new Error('clerk id is required');
+  }
   if (!refundReason || !String(refundReason).trim()) {
     throw new Error('refund reason is required');
   }
 
   return {
     ...returnRequest,
-    approvedBy: clerkId,
+    approvedBy: String(clerkId).trim(),
     approvedAt: new Date().toISOString(),
     refundReason: String(refundReason).trim(),
   };
