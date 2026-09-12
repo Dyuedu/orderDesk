@@ -18,11 +18,16 @@ function openReturn(order, lines) {
   };
 }
 
-function approve(returnRequest, clerkId) {
+function approve(returnRequest, clerkId, refundReason) {
+  if (!refundReason || !String(refundReason).trim()) {
+    throw new Error('refund reason is required');
+  }
+
   return {
     ...returnRequest,
     approvedBy: clerkId,
     approvedAt: new Date().toISOString(),
+    refundReason: String(refundReason).trim(),
   };
 }
 
