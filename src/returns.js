@@ -19,9 +19,13 @@ function openReturn(order, lines) {
 }
 
 function approve(returnRequest, clerkId) {
+  if (!clerkId || !String(clerkId).trim()) {
+    throw new Error('clerk id is required');
+  }
+
   return {
     ...returnRequest,
-    approvedBy: clerkId,
+    approvedBy: String(clerkId).trim(),
     approvedAt: new Date().toISOString(),
   };
 }
